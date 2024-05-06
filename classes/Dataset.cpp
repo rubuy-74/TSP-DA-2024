@@ -1,3 +1,4 @@
+#include <string>
 #include "Dataset.h"
 #include "Graph.h"
 
