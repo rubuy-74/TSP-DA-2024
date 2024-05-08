@@ -11,4 +11,5 @@ add_executable(TSP_DA_2024
         classes/Graph.h
         classes/Parser.cpp
         classes/Parser.h
-        main.cpp)
+        main.cpp
+        classes/Graph.cpp)

@@ -1,5 +1,4 @@
 #include "Parser.h"
-#include <iostream>
 #include <fstream>
 
 std::vector<std::string> Parser::split(std::string line, const std::string &delimiter){
@@ -22,7 +21,7 @@ std::list<std::vector<std::string> > Parser::readFile(const std::string &path, c
    std::string line;
    std::list<std::vector<std::string>> result;
    while (getline(file,line)) {
-       line = line.substr(0,line.length() + 1 - 2 );
+       line = line.substr(0,line.length());
        result.push_back(split(line,","));
    }
    file.close();

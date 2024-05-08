@@ -1,10 +1,13 @@
 #include <string>
+#include <iostream>
 #include "Dataset.h"
 #include "Graph.h"
 
 Dataset::Dataset() {
    this->routes = Graph();
+
 }
+
 
 Dataset::Dataset(std::list<std::vector<std::string>> nodes, std::list<std::vector<std::string>> edges) {
    loadNodes(nodes);
@@ -22,4 +25,10 @@ void Dataset::loadEdges(std::list<std::vector<std::string>> edges) {
    for(std::vector<std::string> e : edges) {
       routes.addEdge(stoi(e[0]), stoi(e[1]), stod(e[2]));
    } // check pop
+}
+
+void Dataset::initializeAdjacencyMatrix() {
+    int graphSize = routes.getNodeSize();
+    std::vector<std::vector<bool>> v(graphSize,std::vector<bool>(graphSize,false));
+    this->adjacencyMatrix = v;
 }
