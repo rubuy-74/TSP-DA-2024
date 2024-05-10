@@ -37,7 +37,7 @@ bool Graph::addEdge(const int source, const int dest, const double distance) {
         this->addNode(src);
     }
     if(dst == nullptr) {
-        dst = new Node(source, 0, 0);
+        dst = new Node(dest, 0, 0);
         this->addNode(dst);
     }
     src->addEdge(dst,distance);

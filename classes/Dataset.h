@@ -8,7 +8,7 @@
 class Dataset {
    private:
       Graph routes;
-      std::vector<std::vector<bool>> adjacencyMatrix;
+      std::vector<std::vector<double>> adjacencyMatrix;
    public:
       Dataset();
       Dataset(std::list<std::vector<std::string>> nodes, std::list<std::vector<std::string>> edges);
@@ -16,10 +16,13 @@ class Dataset {
       void loadNodes(std::list<std::vector<std::string>> nodes);
       void loadEdges(std::list<std::vector<std::string>> edges);
 
-      void initializeAdjacencyMatrix();
 
       Graph getGraph() const { return this->routes; }
-      std::vector<std::vector<bool>> getAdjMatrix() const { return this->adjacencyMatrix; }
+      std::vector<std::vector<double>> getAdjMatrix() const { return this->adjacencyMatrix; }
+
+      void loadMatrix(std::list<std::vector<std::string>> edges);
+
+      void initializeAdjacencyMatrix(std::list<std::vector<std::string>> edges);
 };
 
 #endif
