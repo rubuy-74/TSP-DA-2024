@@ -22,6 +22,7 @@ void Dataset::loadNodes(std::list<std::vector<std::string>> nodes) {
 void Dataset::loadEdges(std::list<std::vector<std::string>> edges) {
    for(std::vector<std::string> e : edges) {
       routes.addEdge(stoi(e[0]), stoi(e[1]), stod(e[2]));
+      routes.addEdge(stoi(e[1]),stoi(e[0]),stod(e[2]));
    } // check pop
 }
 
@@ -35,6 +36,7 @@ void Dataset::loadMatrix(std::list<std::vector<std::string>> edges) {
     }
     for(std::vector<std::string> e : edges) {
         adjacencyMatrix[stoi(e[0])][stoi(e[1])] = stod(e[2]);
+        adjacencyMatrix[stoi(e[1])][stoi(e[0])] = stod(e[2]);
     } // check pop
 }
 

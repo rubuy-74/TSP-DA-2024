@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
+
 class Graph;
 class Node;
 class Edge;
@@ -17,6 +18,8 @@ class Graph {
 
       int getNodeSize() const { return nodes.size(); }
 
+      std::vector<Node *> getVertexSet();
+
       bool addNode(Node* n);
       bool removeNode(int id);
 
@@ -25,10 +28,13 @@ class Graph {
 };
 
 class Node {
-   private:
+protected:
       int id;
       double longitude;
       double latitude;
+      double distance;
+      bool visited;
+      Edge *path;
       std::vector<Edge*> edges;
    public:
       Node(int _id, double _longitude, double _latitude) : id(_id), longitude(_longitude), latitude(_latitude) {};
@@ -37,11 +43,25 @@ class Node {
       int getLongitude() const { return this->longitude; }
       int getLatitude() const { return this->latitude; }
 
+      bool isVisited() const { return this->visited; }
+      void setVisited(bool v) { this->visited = v; }
+
+      double getDistance() const { return this->distance; }
+      void setDistance(double d) { this->distance = d; }
+
+      Edge *getPath() { return this->path; }
+      void setPath(Edge *edge) { this->path = edge; }
+
       std::vector<Edge*> getEdges() const { return this->edges; }
       void setEdges(std::vector<Edge*> edges) { this->edges = edges; }
 
+      bool operator<(const Node &node) const;
+
       bool addEdge(Node* dest, double distance);
       bool removeEdge(Node* edge);
+
+
+    int queueIndex = 0;     // Required by MutablePriorityQueue
 };
 
 
@@ -49,15 +69,19 @@ class Node {
 class Edge {
    private:
       Node* dest;
+      Node *orig;
       double distance;
    public:
-      Edge(Node* _dest, double _distance) : dest(_dest), distance(_distance) {};
+      Edge(Node* _dest,Node *_orig, double _distance) : dest(_dest), orig(_orig),distance(_distance) {};
 
       Node* getDest() const { return this->dest; }
       void setDest(Node* dest) { this->dest = dest; }
 
       double getDistance() const { return this->distance; }
       void setDistance(double capacity) { this->distance = distance; }
+
+      Node *getOrig() const { return this->orig; }
+      void setOrig(Node* orig) { this->orig = orig; }
 };
 
 #endif

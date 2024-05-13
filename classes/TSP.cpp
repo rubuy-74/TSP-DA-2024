@@ -1,7 +1,7 @@
 #include "TSP.h"
 #include <utility>
 
-void tspRec(std::vector<std::vector<double>> dists, unsigned int n, int curI,int curDist, std::vector<double> curPath, double &minDist, std::vector<double> &path) {
+void TSP::tspRec(std::vector<std::vector<double>> dists, unsigned int n, int curI,int curDist, std::vector<double> curPath, int &minDist, std::vector<double> &path) {
     if(curI == n) {
         curDist += dists[curPath[n-1]][curPath[0]];
         if(curDist < minDist) {
@@ -30,10 +30,11 @@ void tspRec(std::vector<std::vector<double>> dists, unsigned int n, int curI,int
     }
 }
 
-unsigned int tspBT(std::vector<std::vector<double>> dists,unsigned int n, std::vector<double> &path) {
+unsigned int TSP::tspBT(std::vector<std::vector<double>> dists,unsigned int n, std::vector<double> &path) {
     std::vector<double> curPath(n+1,0);
-    double minDist = std::numeric_limits<double>::max();
+    int minDist = std::numeric_limits<int>::max();
     curPath[0] = 0;
     tspRec(std::move(dists),n,1,0,curPath,minDist,path);
     return minDist;
 }
+
