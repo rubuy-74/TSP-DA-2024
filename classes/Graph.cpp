@@ -59,8 +59,16 @@ bool Graph::addNode(Node *n) {
     return true;
 }
 
+std::vector<Node *> Graph::getVertexSet() {
+    std::vector<Node *> result;
+    for(auto e: this->nodes) {
+        result.push_back(e.second);
+    }
+    return result;
+}
+
 bool Node::addEdge(Node *dest, double distance) {
-    Edge* edge = new Edge(dest,distance);
+    Edge* edge = new Edge(dest,this,distance);
     this->edges.push_back(edge);
     return true;
 }
@@ -73,4 +81,8 @@ bool Node::removeEdge(Node *dest) {
         }
     }
     return false;
+}
+
+bool Node::operator<(const Node &node) const {
+    return node.getID() > this->getID();
 }
