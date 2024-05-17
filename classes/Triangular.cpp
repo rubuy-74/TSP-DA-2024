@@ -3,9 +3,11 @@
 //
 
 #include "Triangular.h"
+#include <queue>
 
-Graph Triangular::prim(Graph graph) {
-    int smallestValueIndex = graph.getNodeSize() - 1;
+Graph* Triangular::prim(Graph graph) {
+    Graph* mst = new Graph();
+
     if(graph.getVertexSet().empty()){
         return {};
     }
@@ -16,32 +18,42 @@ Graph Triangular::prim(Graph graph) {
         e->setVisited(false);
     }
 
-    for(int i = 0; i < graph.getVertexSet().size(); i++) {
-        if(graph.getVertexSet()[i]->getID() < graph.getVertexSet()[smallestValueIndex]->getID())
-            smallestValueIndex = i;
-    }
-    auto s = graph.getVertexSet()[smallestValueIndex];
-    s->setDistance(0);
+    Node* startingNode = graph.getVertexSet()[0];
+    startingNode->setDistance(0);
 
-    MutablePriorityQueue<Node> q;
-    q.insert(s);
+    auto compare = [](Node* fNode, Node* lNode) { return fNode->getDistance() > lNode->getDistance(); };
+    std::priority_queue<Node*, std::vector<Node*>, decltype(compare)> pq(compare);
+    
+    pq.push(startingNode);
 
-    while(!q.empty()) {
-        Node *w = q.extractMin();
-        for(auto e : w->getEdges()) {
+    while(!pq.empty()) {
+        Node* currentNode = pq.top();
+        pq.pop();
+
+        if(currentNode->isVisited()) {
+            continue;
+        }
+
+        currentNode->setVisited(true);
+
+        Node* mstNode = new Node(currentNode->getID(), currentNode->getLongitude(), currentNode->getLatitude());
+        mst->addNode(mstNode);
+
+        if(currentNode->getPath() != nullptr){
+            Edge* mstEdge = currentNode->getPath();
+            mst->addEdge(mstEdge->getOrig()->getID(), mstEdge->getDest()->getID(), mstEdge->getDistance());
+        }
+
+        for(auto e : currentNode->getEdges()) {
             Node *dest = e->getDest();
-            double oldDist = dest->getDistance();
             if(e->getDistance() < dest->getDistance() && !dest->isVisited()) {
                 dest->setDistance(e->getDistance());
                 dest->setPath(e);
-                if(oldDist == INF) {
-                    q.insert(dest);
-                } else {
-                    q.decreaseKey(dest);
-                }
+                pq.push(dest);
             }
         }
-        w->setVisited(true);
     }
-    return graph;
+
+
+    return mst;
 }

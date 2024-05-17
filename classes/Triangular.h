@@ -16,7 +16,7 @@ public:
      * @param graph Graph to be analyzed.
      * @return The path, from the root to itself. ??
      */
-    static Graph prim(Graph graph);
+    static Graph* prim(Graph graph);
 };
 
 
