@@ -7,12 +7,28 @@
 void testTSPBacktracking(Dataset dataset, std::string file);
 void testTSPTriangular(Dataset dataset, std::string file);
 void displayGraph(Graph graph);
+void testFunctions(Dataset dataset, std::string file);
 
 int main() {
     Dataset dataset = Dataset();
-    testTSPBacktracking(dataset,"tourism.csv");
-    testTSPTriangular(dataset,"tourism.csv");
+    //testTSPBacktracking(dataset,"edges_25.csv");
+    //testTSPTriangular(dataset,"stadiums.csv");
+    testFunctions(dataset, "edges.csv");
     return 0;
+}
+
+void testFunctions(Dataset dataset, std::string file) {
+    Parser parser;
+
+    auto e = parser.readFile("../real-world/graph2/" + file,true);
+    dataset.loadEdges(e);
+    dataset.loadMatrix(e);
+    Graph g = dataset.getGraph();
+    std::pair<double, std::vector<int>> tsp = Triangular::heuristic(&g);
+    std::cout << "total cost: " << tsp.first << '\n';
+    for(int i = 0; i < tsp.second.size(); i++) {
+        std::cout << tsp.second[i] << ", ";
+    }
 }
 
 void testTSPBacktracking(Dataset dataset,std::string file) {
@@ -22,7 +38,7 @@ void testTSPBacktracking(Dataset dataset,std::string file) {
     dataset.loadEdges(e);
     dataset.loadMatrix(e);
 
-    int sum = 0;
+    double sum = 0;
 
     std::vector<double> path(dataset.getGraph().getNodeSize(),0);
     std::cout << TSP::tspBT(dataset.getAdjMatrix(),dataset.getGraph().getNodeSize(),path)<< "\n";
@@ -41,16 +57,15 @@ void testTSPTriangular(Dataset dataset, std::string file) {
     auto e = parser.readFile("../toy-graphs/" + file,true);
     dataset.loadEdges(e);
     dataset.loadMatrix(e);
-    Graph newGraph = Triangular::prim(dataset.getGraph());
-    for(auto n : newGraph.getVertexSet()) {
+    Graph* newGraph = Triangular::prim(dataset.getGraph());
+    for(auto n : newGraph->getVertexSet()) {
         if(n->getPath() != nullptr && n->getPath()->getDest() == nullptr)
             end = n;
-    }
-    for(auto n : newGraph.getVertexSet()) {
-        std::cout << n->getID() << '\n';
-        std::cout << "  " << n->getPath()->getOrig()->getID() << '\n';
-        std::cout << "  " << n->getPath()->getDistance() << '\n';
-    }
+    } // why??
+
+    displayGraph(dataset.getGraph());
+    std::cout << "----------------------------------------" << '\n';
+    displayGraph(*newGraph);
 }
 
 void displayGraph(Graph graph) {

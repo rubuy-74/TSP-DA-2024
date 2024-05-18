@@ -69,7 +69,7 @@ protected:
 class Edge {
    private:
       Node* dest;
-      Node *orig;
+      Node* orig;
       double distance;
    public:
       Edge(Node* _dest,Node *_orig, double _distance) : dest(_dest), orig(_orig),distance(_distance) {};

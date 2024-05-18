@@ -5,6 +5,7 @@
 #include "Graph.h"
 #include "MutablePriorityQueue.h"
 #include <limits>
+#include <set>
 
 #define INF std::numeric_limits<int>::max()
 
@@ -16,7 +17,11 @@ public:
      * @param graph Graph to be analyzed.
      * @return The path, from the root to itself. ??
      */
-    static Graph prim(Graph graph);
+    static Graph* prim(Graph graph);
+    static std::unordered_map<int, std::unordered_map<int, double>> djikstra(Graph *graph, std::set<int> oddDegreeNodes);
+    static Graph* minimumWeightPerfectMatching(Graph *graph, std::set<int> oddDegreeNodes);
+    static std::vector<int> findEulerianCircuit(Graph *graph);
+    static std::pair<double, std::vector<int>> heuristic(Graph *graph);
 };
 
 
