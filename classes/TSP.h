@@ -16,8 +16,8 @@ class TSP {
      * @param path Current path to the end
      */
     static void
-    tspRec(std::vector<std::vector<double>> dists, unsigned int n, int curI, double curDist, std::vector<double> curPath,
-           double &minDist, std::vector<double> &path);
+    tspRec(std::vector<std::vector<double>> dists, unsigned int n, int curI, double curDist, std::vector<int> curPath,
+           double &minDist, std::vector<int> &path);
 public:
     /**
      * @brief Travelling Sales-Person Problem solution using backtracking
@@ -26,7 +26,7 @@ public:
      * @param path Final path
      * @return
      */
-    static double tspBT(std::vector<std::vector<double>> dists,unsigned int n, std::vector<double> &path);
+    static double tspBT(std::vector<std::vector<double>> dists,unsigned int n, std::vector<int> &path);
 };
 
 

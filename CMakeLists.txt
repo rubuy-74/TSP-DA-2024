@@ -17,4 +17,8 @@ add_executable(TSP_DA_2024
         classes/TSP.cpp
         classes/Triangular.cpp
         classes/Triangular.h
-        classes/MutablePriorityQueue.h)
+        classes/MutablePriorityQueue.h
+        classes/Heuristic.cpp
+        classes/Heuristic.h
+        classes/Prim.cpp
+        classes/Prim.h)
