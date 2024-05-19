@@ -1,7 +1,11 @@
 #include "TSP.h"
 #include <utility>
 
-void TSP::tspRec(std::vector<std::vector<double>> dists, unsigned int n, int curI,double curDist, std::vector<int> curPath, double &minDist, std::vector<int> &path) {
+void TSP::tspRec(
+        std::vector<std::vector<double>> dists,
+        unsigned int n, int curI,double curDist,
+        std::vector<int> curPath, double &minDist,
+        std::vector<int> &path) {
     if(curI == n) {
         curDist += dists[curPath[n-1]][curPath[0]];
         if(curDist < minDist) {
@@ -23,7 +27,13 @@ void TSP::tspRec(std::vector<std::vector<double>> dists, unsigned int n, int cur
                 }
                 if(isNewNode) {
                     curPath[curI] = i;
-                    tspRec(dists,n,curI + 1,curDist + dists[curPath[curI - 1]][curPath[curI]],curPath,minDist,path);
+                    tspRec( dists,
+                            n,
+                            curI + 1,
+                            curDist + dists[curPath[curI - 1]][curPath[curI]],
+                            curPath,
+                            minDist,
+                            path);
                 }
             }
         }
