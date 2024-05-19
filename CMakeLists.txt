@@ -21,4 +21,6 @@ add_executable(TSP_DA_2024
         classes/Heuristic.cpp
         classes/Heuristic.h
         classes/Prim.cpp
-        classes/Prim.h)
+        classes/Prim.h
+        classes/Menu.cpp
+        classes/Menu.h)
