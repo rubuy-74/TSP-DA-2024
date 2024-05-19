@@ -15,13 +15,14 @@ public:
    
     void MainMenu();
     void DatasetMenu();
-    void TSPBacktracking(Dataset dataset,std::string path, std::string file);
-    void TSPTriangular(Dataset dataset,std::string path ,std::string file);
-    void testFunctions(Dataset dataset, std::string path ,std::string file);
-    
-    
+
     void backToMainMenu();
 };
+
+void TSPBacktracking(Dataset dataset, std::string filePath, std::string file);
+void TSPTriangular(Dataset dataset, std::string filePath, std::string file);
+void testFunctions(Dataset dataset, std::string path, std::string file);
+void printPath(std::vector<int> path, double sumDist);
 
 
 #endif 

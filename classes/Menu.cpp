@@ -11,7 +11,6 @@
 #include "Triangular.h"
 #include "Heuristic.h"
 
-void printPath(std::vector<int> path,double sumDist);
 
 void Menu::MainMenu(){
 
@@ -45,22 +44,20 @@ void Menu::MainMenu(){
 
 
         if (topic_in_main_menu == 1) {
-            std::cout << "Shortest path: " <<  std::endl;
             TSPBacktracking(this->dataset, this->path, this->file);
 
             backToMainMenu();
         } else if (topic_in_main_menu == 2) {
-            std::cout << "Shortest path: " << std::endl;
             TSPTriangular(this->dataset, this->path, this->file);
         
             backToMainMenu();
         } else if (topic_in_main_menu == 3) {
-            std::cout << "Shortest path: "  << std::endl;
+            
 
             backToMainMenu();
         }
         else if (topic_in_main_menu == 4) {
-            std::cout << "Shortest path: "  << std::endl;
+            testFunctions(this->dataset, this->path, this->file);
 
             backToMainMenu();
         }
@@ -182,8 +179,8 @@ void testFunctions(Dataset dataset,std::string path, std::string file) {
 
 
 void printPath(std::vector<int> path,double sumDist) {
-    std::cout << "distance: " << sumDist << '\n';
-    std::cout << "path:" << '\n';
+    std::cout << "Distance: " << sumDist << '\n';
+    std::cout << "Path:" << '\n';
     for(int i = 0; i < path.size(); i++) {
         std::cout << path[i] << ", ";
     }
