@@ -11,27 +11,25 @@
 #include "Triangular.h"
 #include "Heuristic.h"
 
+bool done = false;
 
 void Menu::MainMenu(){
+    while (!done) {
+        std::cout << "\n\n ----------------------------------------------\n"
+                     "|                 Main Menu                    |\n"
+                     " ----------------------------------------------\n";
+        std::cout << "Hello, travelling salesman!\n";
+        std::cout << "Select the number of the topic...\n"
+                     "[1]> Backtracking algorithm (4.1)\n"
+                     "[2]> Triangular Approximation (4.2)\n"
+                     "[3]> Other Heuristics (4.3)\n"
+                     "[4]> TSP in Real World (4.4)\n"
 
+                     "\n[0]> Quit\n";
 
+        int topic_in_main_menu;
+        std::string striTemp;
 
-    std::cout << "\n\n ----------------------------------------------\n"
-                 "|                 Main Menu                    |\n"
-                 " ----------------------------------------------\n";
-    std::cout << "Hello, travelling salesman!\n";
-    std::cout << "Select the number of the topic...\n"
-                 "[1]> Backtracking algorithm (4.1)\n"
-                 "[2]> Triangular Approximation (4.2)\n"
-                 "[3]> Other Heuristics (4.3)\n"
-                 "[4]> TSP in Real World (4.4)\n"
-
-                 "\n[0]> Quit\n";
-
-    int topic_in_main_menu;
-    std::string striTemp;
-
-    while (true) {
         topic_in_main_menu = 0;
         striTemp = "";
         std::cin >> striTemp;
@@ -46,24 +44,22 @@ void Menu::MainMenu(){
         if (topic_in_main_menu == 1) {
             TSPBacktracking(this->dataset, this->path, this->file);
 
-            backToMainMenu();
         } else if (topic_in_main_menu == 2) {
             TSPTriangular(this->dataset, this->path, this->file);
         
-            backToMainMenu();
         } else if (topic_in_main_menu == 3) {
-            
 
-            backToMainMenu();
         }
         else if (topic_in_main_menu == 4) {
-            testFunctions(this->dataset, this->path, this->file);
+            TSPHeuristic(this->dataset, this->path, this->file);
 
-            backToMainMenu();
         }
         else if (topic_in_main_menu == 0) break;
         else std::cout << "Error: Choose one number of the Main Menu.\n";
-}
+
+        backToMainMenu();
+    }
+
 }
 
 void Menu::DatasetMenu() {
@@ -166,7 +162,7 @@ void TSPTriangular(Dataset dataset,std::string filePath, std::string file) {
     printPath(result,sumDist);
 }
 
-void testFunctions(Dataset dataset,std::string path, std::string file) {
+void TSPHeuristic(Dataset dataset,std::string path, std::string file) {
     Parser parser;
 
     auto e = parser.readFile(path + file,true);
@@ -208,8 +204,8 @@ void Menu::backToMainMenu( ){
         catch (...) {
             back = 10;
         }
-        if (back == 1) Menu menu();
-        else if (back == 0) break;
+        if (back == 1) { return;}
+        else if (back == 0) {done = true; break;};
         std::cout << "> Invalid choice.\n"
                      "[1]> Back to Main Menu.\n"
                      "[0]> Quit.\n";
