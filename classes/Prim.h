@@ -11,6 +11,7 @@ public:
     /**
      * @brief Minimum Spanning Tree algorithm to determine the path from the root node. The Prim's algorithm was
      * chosen because the it's better for dense graphs.
+     * \n Time Complexity: O(E * logV)
      * @param graph Graph to be analyzed.
      * @return The path from the root node.
     */

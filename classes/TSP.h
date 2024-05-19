@@ -6,7 +6,8 @@
 
 class TSP {
     /**
-     * @brief Recursive function that determines the most effective path to get the minimum cost of a Hamiltonian
+     * @brief Recursive function that determines the most effective path to get the minimum cost of a Hamiltonian cycle
+     * \n Time Complexity: O(2^(V*E))
      * @param dists Matrix containing the distances between nodes
      * @param n Number of nodes in the graph
      * @param curI Current Iteration
@@ -21,6 +22,7 @@ class TSP {
 public:
     /**
      * @brief Travelling Sales-Person Problem solution using backtracking
+     * \n Time Complexity: O(2^(V+E))
      * @param dists Matrix containing the distances between nodes
      * @param n Number of nodes in the graph
      * @param path Final path
