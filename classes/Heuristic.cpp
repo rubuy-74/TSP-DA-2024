@@ -10,7 +10,7 @@ std::vector<int> Heuristic::findEulerianCircuit(Graph *graph) { // (nv)
 
     for(auto n : graph->getVertexSet()){
         for(auto e : n->getEdges()){
-            adjList[n->getID()].push_back(e->getDest()->getID());
+            adjList[n->getID()].push_back(e.second->getDest()->getID());
         }
     }
 
@@ -30,12 +30,12 @@ std::vector<int> Heuristic::findEulerianCircuit(Graph *graph) { // (nv)
     return circuit;
 }
 
-std::unordered_map<int, std::unordered_map<int, double>> Heuristic::djikstra(Graph *graph, std::set<int> oddDegreeNodes){
+std::unordered_map<int, std::unordered_map<int, double>> Heuristic::heuristicDjikstra(Graph *graph, std::set<int> oddDegreeNodes){
     std::unordered_map<int, std::unordered_map<int, double>> shortestPaths;
     for(int first : oddDegreeNodes){
         std::unordered_map<int, double> distances;
-        for(auto second : graph->getVertexSet()){
-            distances[second->getID()] = INF;
+        for(auto second : oddDegreeNodes){
+            distances[second] = INF;
         }
         distances[first] = 0;
         std::priority_queue<std::pair<double, int>, std::vector<std::pair<double, int>>, std::greater<std::pair<double, int>>> pq;
@@ -52,9 +52,9 @@ std::unordered_map<int, std::unordered_map<int, double>> Heuristic::djikstra(Gra
             Node* node = graph->findNode(nodeID);
 
             if(node) {
-                for(Edge* edge : node->getEdges()){
-                    int destID = edge->getDest()->getID();
-                    double distance = edge->getDistance();
+                for(auto edge : node->getEdges()){
+                    int destID = edge.second->getDest()->getID();
+                    double distance = edge.second->getDistance();
                     if(distances[nodeID] + distance < distances[destID]){
                         distances[destID] = distances[nodeID] + distance;
                         pq.push({distances[destID], destID});
@@ -70,7 +70,7 @@ std::unordered_map<int, std::unordered_map<int, double>> Heuristic::djikstra(Gra
 Graph* Heuristic::minimumWeightPerfectMatching(Graph *graph, std::set<int> oddDegreeNodes){
     Graph* matching = new Graph();
 
-    std::unordered_map<int, std::unordered_map<int, double>> shortestPaths = djikstra(graph, oddDegreeNodes);
+    std::unordered_map<int, std::unordered_map<int, double>> shortestPaths = heuristicDjikstra(graph, oddDegreeNodes);
 
     std::vector<std::tuple<int, int, double>> edges; //cringe but yea
 
@@ -122,16 +122,15 @@ double calculateTotalDistance(const std::vector<int>& path, Graph* graph) {
     double totalDistance = 0;
     for (int i = 0; i < path.size() - 1; i++) {
         Node* node = graph->findNode(path[i]);
-        for (Edge* edge : node->getEdges()) {
-            if (edge->getDest()->getID() == path[i + 1]) {
-                totalDistance += edge->getDistance();
+        for (auto edge : node->getEdges()) {
+            if (edge.second->getDest()->getID() == path[i + 1]) {
+                totalDistance += edge.second->getDistance();
                 break;
             }
         }
     }
     return totalDistance;
 }
-
 
 std::pair<double, std::vector<int>> Heuristic::heuristic(Graph *graph){
     Graph *mst = Prim::prim(*graph);
@@ -146,13 +145,13 @@ std::pair<double, std::vector<int>> Heuristic::heuristic(Graph *graph){
 
     for(auto n : mst->getVertexSet()){
         for(auto e : n->getEdges()){
-            matchedMST.addEdge(e->getOrig()->getID(), e->getDest()->getID(), e->getDistance());
+            matchedMST.addEdge(e.second->getOrig()->getID(), e.second->getDest()->getID(), e.second->getDistance());
         }
     }
 
     for(auto n : matching->getVertexSet()){
         for(auto e : n->getEdges()) {
-            matchedMST.addEdge(e->getOrig()->getID(), e->getDest()->getID(), e->getDistance());
+            matchedMST.addEdge(e.second->getOrig()->getID(), e.second->getDest()->getID(), e.second->getDistance());
         }
     }
 

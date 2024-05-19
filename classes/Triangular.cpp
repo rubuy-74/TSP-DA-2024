@@ -35,9 +35,9 @@ void Triangular::preOrderGraph(Node *node, Graph graph, Graph oldGraph, std::vec
         auto n = graph.findNode(currentIndex);
         n->setVisited(true);
         for(auto e: n->getEdges()) {
-            auto w = e->getDest();
+            auto w = e.second->getDest();
             if(!w->isVisited()) {
-                sumDist += e->getDistance();
+                sumDist += e.second->getDistance();
                 q.push(w->getID());
             }
         }

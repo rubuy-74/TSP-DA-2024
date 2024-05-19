@@ -3,7 +3,10 @@
 
 #include <unordered_map>
 #include <vector>
+#include <queue>
+#include <string>
 
+#define INF std::numeric_limits<int>::max()
 
 class Graph;
 class Node;
@@ -25,6 +28,8 @@ class Graph {
 
       bool addEdge(int source, int dest, double distance);
       bool removeEdge(int source, int dest);
+      void makeGraphFullyConnected();
+      bool connectGraphThroughDjikstra();
 };
 
 class Node {
@@ -35,7 +40,7 @@ protected:
       double distance;
       bool visited;
       Edge *path;
-      std::vector<Edge*> edges;
+      std::unordered_map<std::string, Edge*> edges;
    public:
       Node(int _id, double _longitude, double _latitude) : id(_id), longitude(_longitude), latitude(_latitude) {};
 
@@ -52,8 +57,8 @@ protected:
       Edge *getPath() { return this->path; }
       void setPath(Edge *edge) { this->path = edge; }
 
-      std::vector<Edge*> getEdges() const { return this->edges; }
-      void setEdges(std::vector<Edge*> edges) { this->edges = edges; }
+      std::unordered_map<std::string, Edge*> getEdges() const { return this->edges; }
+      void setEdges(std::unordered_map<std::string, Edge*> edges) { this->edges = edges; }
 
       bool operator<(const Node &node) const;
 

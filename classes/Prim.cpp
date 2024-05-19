@@ -42,10 +42,10 @@ Graph* Prim::prim(Graph graph,int firstIndex) {
         }
 
         for(auto e : currentNode->getEdges()) {
-            Node *dest = e->getDest();
-            if(e->getDistance() < dest->getDistance() && !dest->isVisited()) {
-                dest->setDistance(e->getDistance());
-                dest->setPath(e);
+            Node *dest = e.second->getDest();
+            if(e.second->getDistance() < dest->getDistance() && !dest->isVisited()) {
+                dest->setDistance(e.second->getDistance());
+                dest->setPath(e.second);
                 pq.push(dest);
             }
         }

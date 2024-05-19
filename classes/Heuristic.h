@@ -19,7 +19,7 @@ public:
      * @param oddDegreeNodes nodes with odd degree
      * @return a map with the current node and the next and the distance between them
      */
-    static std::unordered_map<int, std::unordered_map<int, double>> djikstra(Graph *graph, std::set<int> oddDegreeNodes);
+    static std::unordered_map<int, std::unordered_map<int, double>> heuristicDjikstra(Graph *graph, std::set<int> oddDegreeNodes);
     /**
      * Perfect matching algorithm to group for groups of two to minimize its distance.
      * \n Time Complexity: O(V²)
