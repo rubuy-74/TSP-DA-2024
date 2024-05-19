@@ -1,7 +1,3 @@
-//
-// Created by ritac on 24/05/2023.
-//
-
 #include "Menu.h"
 #include <string>
 #include <iostream>
@@ -42,19 +38,39 @@ void Menu::MainMenu(){
 
 
         if (topic_in_main_menu == 1) {
-            TSPBacktracking(this->dataset, this->path, this->file);
-
-        } else if (topic_in_main_menu == 2) {
+            auto start = std::chrono::high_resolution_clock::now();
+            TSPBacktracking(dataset, path, file);
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            std::cout << "TSP Backtracking took " << duration.count() / 1000000.0 << " seconds.\n";
+        } else if (topic_in_main_menu == 2 && this->file != "shipping.csv") {
+            auto start = std::chrono::high_resolution_clock::now();
             TSPTriangular(this->dataset, this->path, this->file);
-        
-        } else if (topic_in_main_menu == 3) {
-
-        }
-        else if (topic_in_main_menu == 4) {
-            TSPHeuristic(this->dataset, this->path, this->file);
-
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            std::cout << "TSP Triangular Approximation took " << duration.count() / 1000000.0 << " seconds.\n";
+        } else if (topic_in_main_menu == 3 && this->file != "shipping.csv") {
+            auto start = std::chrono::high_resolution_clock::now();
+            TSPHeuristic(this->dataset, this->path, this->file, 0);
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            std::cout << "TSP Heuristic " << duration.count() / 1000000.0 << " seconds.\n";
+        } else if (topic_in_main_menu == 4) {
+            std::cout << "Select the index of the starting node:\n";
+            int index;
+            std::cin >> index;
+            auto start = std::chrono::high_resolution_clock::now();
+            if(!TSPHeuristic(this->dataset, this->path, this->file, index)) {
+                backToMainMenu();
+            }
+            else {
+                auto end = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+                std::cout << "TSP Heuristic took " << duration.count() / 1000000.0 << " seconds.\n";
+            }
         }
         else if (topic_in_main_menu == 0) break;
+        else if (topic_in_main_menu < 4) std::cout << "Error: Not valid choice\n";
         else std::cout << "Error: Choose one number of the Main Menu.\n";
 
         backToMainMenu();
@@ -108,16 +124,15 @@ void Menu::DatasetMenu() {
             break;
         } else if (topic_in_dataset_menu == 4) {
             this->file = "edges.csv";
-            this->path = "../Real-world Graphs/graph1/";
+            this->path = "../real-world/graph1/";
             break;
         } else if (topic_in_dataset_menu == 5) {
             this->file = "edges.csv";
-            this->path = "../Real-world Graphs/graph2/";
-        
+            this->path = "../real-world/graph2/";
             break;
         } else if (topic_in_dataset_menu == 6) {
             this->file = "edges.csv";
-            this->path = "../Real-world Graphs/graph3/";
+            this->path = "../real-world/graph3/";
             break;
         } else if (topic_in_dataset_menu == 7) {
             std::cout << "Select the fully connected graph you want to use (ex: edges_25.csv) ... " <<std::endl;
@@ -125,7 +140,7 @@ void Menu::DatasetMenu() {
             std::cin >> edgesFile;
 
             this->file = edgesFile;
-            this->path = "../Extra_Fully_Connected_Graphs/";
+            this->path = "../other_graphs/";
             break;
         }
 
@@ -142,35 +157,51 @@ void TSPBacktracking(Dataset dataset,std::string filePath, std::string file) {
     dataset.loadEdges(e);
     dataset.loadMatrix(e);
 
-    double sum = 0;
-
     std::vector<int> path(dataset.getGraph().getNodeSize(),0);
     double sumDist = TSP::tspBT(dataset.getAdjMatrix(),dataset.getGraph().getNodeSize(),path);
     path.push_back(0);
     printPath(path,sumDist);
 }
 
-void TSPTriangular(Dataset dataset,std::string filePath, std::string file) {
+void TSPTriangular(Dataset dataset, std::string filePath, std::string file) {
     Parser parser;
     std::vector<int> result;
-
     auto e = parser.readFile(filePath + file,true);
     dataset.loadEdges(e);
-    dataset.loadMatrix(e);
+    Graph g = dataset.getGraph();
 
-    double sumDist = Triangular::tspTriangular(dataset.getGraph(),result);
+    if(filePath == "../real-world/graph1/" || filePath == "../real-world/graph2/" || filePath == "../real-world/graph3/"){
+        g.makeGraphFullyConnected();
+    }
+
+    double sumDist = Triangular::tspTriangular(g,result);
     printPath(result,sumDist);
 }
 
-void TSPHeuristic(Dataset dataset,std::string path, std::string file) {
+bool TSPHeuristic(Dataset dataset,std::string path, std::string file, int startingIndex) {
     Parser parser;
 
     auto e = parser.readFile(path + file,true);
     dataset.loadEdges(e);
-    dataset.loadMatrix(e);
     Graph g = dataset.getGraph();
-    std::pair<double, std::vector<int>> tsp = Heuristic::heuristic(&g);
+
+    if(startingIndex > g.getNodeSize()) {
+        std::cout << "Index too big.\n";
+        return false;
+    }
+    auto start = std::chrono::high_resolution_clock::now();
+
+    if(path == "../toy-graphs/" && file == "shipping.csv"){
+        g.connectGraphThroughDjikstra();
+    }
+
+    if(path == "../real-world/graph1/" || path == "../real-world/graph2/" || path == "../real-world/graph3/"){
+        g.connectGraphThroughDjikstra();
+    }
+
+    std::pair<double, std::vector<int>> tsp = Heuristic::heuristic(&g, startingIndex);
     printPath(tsp.second,tsp.first);
+    return true;
 }
 
 
@@ -185,7 +216,6 @@ void printPath(std::vector<int> path,double sumDist) {
 
 
 Menu::Menu() {
-
 }
 
 
@@ -212,4 +242,5 @@ void Menu::backToMainMenu( ){
     }
 
 }
+
 

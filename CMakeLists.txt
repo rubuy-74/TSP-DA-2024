@@ -43,4 +43,6 @@ add_executable(TSP_DA_2024
         classes/Prim.cpp
         classes/Prim.h
         classes/Menu.cpp
-        classes/Menu.h)
+        classes/Menu.h
+        classes/Haversine.cpp
+        classes/Haversine.h)

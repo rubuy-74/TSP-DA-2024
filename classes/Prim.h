@@ -15,7 +15,7 @@ public:
      * @param graph Graph to be analyzed.
      * @return The path from the root node.
     */
-    static Graph* prim(Graph graph,int firstIndex = 2);
+    static Graph* prim(Graph graph,int firstIndex = 0);
 };
 
 
