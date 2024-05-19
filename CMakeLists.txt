@@ -42,10 +42,7 @@ add_executable(TSP_DA_2024
         classes/Heuristic.h
         classes/Prim.cpp
         classes/Prim.h
-<<<<<<< HEAD
         classes/Menu.cpp
-        classes/Menu.h)
-=======
+        classes/Menu.h
         classes/Haversine.cpp
         classes/Haversine.h)
->>>>>>> 169f487 (4.4)

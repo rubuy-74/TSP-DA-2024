@@ -21,7 +21,7 @@ public:
 
 void TSPBacktracking(Dataset dataset, std::string filePath, std::string file);
 void TSPTriangular(Dataset dataset, std::string filePath, std::string file);
-void TSPHeuristic(Dataset dataset, std::string path, std::string file);
+bool TSPHeuristic(Dataset dataset, std::string path, std::string file, int startingIndex);
 void printPath(std::vector<int> path, double sumDist);
 
 

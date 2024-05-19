@@ -14,26 +14,11 @@ int main() {
     return 0;
 }
 
-
 void testTSPBacktracking(Dataset dataset,std::string path, std::string file);
 void testTSPTriangular(Dataset dataset,std::string path ,std::string file);
 void testFunctions(Dataset dataset, std::string path ,std::string file);
 void printPath(std::vector<int> path,double sumDist);
 void testConnecter(Dataset dataset, std::string path, std::string file);
-
-int main() {
-    Dataset dataset;
-    std::string file = "edges.csv";
-    std::string path = "../real-world/graph2/";
-
-    //testTSPBacktracking(dataset, path, file);
-    testTSPTriangular(dataset, path, file);
-    //testFunctions(dataset, path, file);
-
-    //testConnecter(dataset, path, file);
-
-    return 0;
-}
 
 void testConnecter(Dataset dataset, std::string path, std::string file){
     Parser parser;
@@ -97,13 +82,4 @@ void testTSPTriangular(Dataset dataset,std::string filePath, std::string file) {
 
     double sumDist = Triangular::tspTriangular(graph,result);
     printPath(result,sumDist);
-}
-
-void printPath(std::vector<int> path,double sumDist) {
-    std::cout << "distance: " << sumDist << '\n';
-    std::cout << "path:" << '\n';
-    for(int i = 0; i < path.size(); i++) {
-        std::cout << path[i] << ", ";
-    }
-    std::cout << '\n';
 }

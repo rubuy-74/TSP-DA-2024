@@ -132,8 +132,8 @@ double calculateTotalDistance(const std::vector<int>& path, Graph* graph) {
     return totalDistance;
 }
 
-std::pair<double, std::vector<int>> Heuristic::heuristic(Graph *graph){
-    Graph *mst = Prim::prim(*graph);
+std::pair<double, std::vector<int>> Heuristic::heuristic(Graph *graph, int startingNode){
+    Graph *mst = Prim::prim(*graph, startingNode);
     std::set<int> oddDegreeNodes = getOddDegreeNodes(mst);
     Graph *matching = minimumWeightPerfectMatching(mst, oddDegreeNodes);
 

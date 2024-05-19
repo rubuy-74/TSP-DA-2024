@@ -30,6 +30,8 @@ class Graph {
       bool removeEdge(int source, int dest);
       void makeGraphFullyConnected();
       bool connectGraphThroughDjikstra();
+
+      std::unordered_map<int, std::unordered_map<int, double>> floydWarshall();
 };
 
 class Node {
@@ -64,9 +66,6 @@ protected:
 
       bool addEdge(Node* dest, double distance);
       bool removeEdge(Node* edge);
-
-
-    int queueIndex = 0;     // Required by MutablePriorityQueue
 };
 
 
@@ -83,7 +82,7 @@ class Edge {
       void setDest(Node* dest) { this->dest = dest; }
 
       double getDistance() const { return this->distance; }
-      void setDistance(double capacity) { this->distance = distance; }
+      void setDistance(double capacity) { this->distance = capacity; }
 
       Node *getOrig() const { return this->orig; }
       void setOrig(Node* orig) { this->orig = orig; }

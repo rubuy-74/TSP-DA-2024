@@ -1,7 +1,7 @@
 #include <queue>
 #include "Prim.h"
 
-Graph* Prim::prim(Graph graph,int firstIndex) {
+Graph* Prim::prim(Graph graph, int firstIndex) {
     Graph* mst = new Graph();
 
     if(graph.getVertexSet().empty()){

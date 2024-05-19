@@ -10,55 +10,48 @@ Node* Graph::findNode(int id) const {
     return nullptr;
 }
 
-std::unordered_map<int, std::unordered_map<int, double>> djikstra(Graph *graph){
-    std::unordered_map<int, std::unordered_map<int, double>> shortestPaths;
-    for(auto first : graph->getVertexSet()){
-        std::unordered_map<int, double> distances;
-        for(auto second : graph->getVertexSet()){
-            distances[second->getID()] = INF;
+std::unordered_map<int, std::unordered_map<int, double>> Graph::floydWarshall() {
+    std::unordered_map<int, std::unordered_map<int, double>> dist;
+
+    for(auto& node1 : nodes) {
+        for(auto& node2 : nodes) {
+            dist[node1.first][node2.first] = (node1.first == node2.first) ? 0 : INF;
         }
-        distances[first->getID()] = 0;
-        std::priority_queue<std::pair<double, int>, std::vector<std::pair<double, int>>, std::greater<std::pair<double, int>>> pq;
+    }
 
-        pq.push({0, first->getID()});
+    for(auto& node1 : nodes) {
+        for(auto& edge : node1.second->getEdges()) {
+            int destID = edge.second->getDest()->getID();
+            double distance = edge.second->getDistance();
+            dist[node1.first][destID] = distance;
+        }
+    }
 
-        while (!pq.empty()) {
-            int nodeID = pq.top().second;
-            double d = pq.top().first;
-            pq.pop();
-
-            if(d > distances[nodeID]) continue;
-
-            Node* node = graph->findNode(nodeID);
-
-            if(node) {
-                for(auto edge : node->getEdges()){
-                    int destID = edge.second->getDest()->getID();
-                    double distance = edge.second->getDistance();
-                    if(distances[nodeID] + distance < distances[destID]){
-                        distances[destID] = distances[nodeID] + distance;
-                        pq.push({distances[destID], destID});
-                    }
+    for(auto& k : nodes) {
+        for(auto& i : nodes) {
+            for(auto& j : nodes) {
+                if(dist[i.first][k.first] < INF && dist[k.first][j.first] < INF) {
+                    dist[i.first][j.first] = std::min(dist[i.first][j.first], dist[i.first][k.first] + dist[k.first][j.first]);
                 }
             }
         }
-        shortestPaths[first->getID()] = distances;
     }
-    return shortestPaths;
+    return dist;
 }
 
 bool Graph::connectGraphThroughDjikstra() {
-    std::unordered_map<int, std::unordered_map<int, double>> shorteshPaths = djikstra(this);
-    for(auto first : getVertexSet()){
-        for(auto second : getVertexSet()){
-            if(first->getID() != second->getID()){
-                Edge* e = findEdge(first->getID(), second->getID());
-                if(e == nullptr){
-                    if(shorteshPaths[first->getID()][second->getID()] != INF){
-                        addEdge(first->getID(), second->getID(), shorteshPaths[first->getID()][second->getID()]);
-                        addEdge(second->getID(), first->getID(), shorteshPaths[first->getID()][second->getID()]);
-                    }
-                    else {
+    auto shortestPaths = floydWarshall();
+
+    for(auto& node1 : nodes) {
+        for(auto& node2 : nodes) {
+            if(node1.first != node2.first) {
+                if(findEdge(node1.first, node2.first) == nullptr) {
+                    double distance = shortestPaths[node1.first][node2.first];
+                    if(distance != INF) {
+                        addEdge(node1.first, node2.first, distance);
+                        addEdge(node2.first, node1.first, distance);
+                    } else {
+                        std::cerr << "Cannot fully connect the graph, as there is no path between node " << node1.first << " and node " << node2.first << std::endl;
                         return false;
                     }
                 }
@@ -70,16 +63,17 @@ bool Graph::connectGraphThroughDjikstra() {
 
 void Graph::makeGraphFullyConnected() {
     auto vertices = getVertexSet();
-    for(auto n1 : vertices){
-        if(n1->getEdges().size() == nodes.size() - 1) continue;
-        for(auto n2 : vertices){
-            if(n1->getID() != n2->getID()){
-                Edge* e = findEdge(n1->getID(), n2->getID());
-                if(e == nullptr){
-                    const double distance = calculate_distance(n1->getLatitude(), n1->getLongitude(), n2->getLatitude(), n2->getLongitude());
-                    addEdge(n1->getID(), n2->getID(), distance);
-                    addEdge(n2->getID(), n1->getID(), distance);
-                }
+    size_t n = vertices.size();
+
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = i + 1; j < n; ++j) {
+            Node* n1 = vertices[i];
+            Node* n2 = vertices[j];
+
+            if (findEdge(n1->getID(), n2->getID()) == nullptr) {
+                double distance = calculate_distance(n1->getLatitude(), n1->getLongitude(), n2->getLatitude(), n2->getLongitude());
+                addEdge(n1->getID(), n2->getID(), distance);
+                addEdge(n2->getID(), n1->getID(), distance);
             }
         }
     }

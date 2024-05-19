@@ -1,5 +1,6 @@
 #include "TSP.h"
 #include <utility>
+#include <iostream>
 
 void TSP::tspRec(
         std::vector<std::vector<double>> dists,
@@ -27,6 +28,7 @@ void TSP::tspRec(
                 }
                 if(isNewNode) {
                     curPath[curI] = i;
+                    std::cout << minDist << '\n';
                     tspRec( dists,
                             n,
                             curI + 1,

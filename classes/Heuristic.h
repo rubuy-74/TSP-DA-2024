@@ -36,12 +36,12 @@ public:
      */
     static std::vector<int> findEulerianCircuit(Graph *graph);
     /**
-     * Returns the final cost and path
+     * This heuristic takes advantage of the dijkstra, prim and minimum weight perfect matching algorithm to find a solution, returning the cost and path.
      * \n Time Complexity: max(O(VE),O(V²))
      * @param graph graph to be analyzed
      * @return map of the final cost and path
      */
-    static std::pair<double, std::vector<int>> heuristic(Graph *graph);
+    static std::pair<double, std::vector<int>> heuristic(Graph *graph, int startingNode = 0);
 };
 
 
